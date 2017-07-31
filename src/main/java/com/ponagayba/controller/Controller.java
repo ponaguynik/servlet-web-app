@@ -1,5 +1,9 @@
 package com.ponagayba.controller;
 
+
+import com.ponagayba.exception.PageNotFoundException;
+import com.ponagayba.util.DispatcherHelper;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,7 +12,7 @@ import java.io.IOException;
 public abstract class Controller {
 
     public String process(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, PageNotFoundException {
         if (request.getMethod().equals("GET"))
             return processGet(request, response);
         if (request.getMethod().equals("POST"))
@@ -17,9 +21,15 @@ public abstract class Controller {
             throw new UnsupportedOperationException();
     }
 
+    protected String chain(HttpServletRequest request, HttpServletResponse response, String target)
+            throws ServletException, IOException, PageNotFoundException {
+        DispatcherHelper helper = new DispatcherHelper(target);
+        return helper.getController().process(request, response);
+    }
+
     protected abstract String processGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException;
+            throws ServletException, IOException, PageNotFoundException;
 
     protected abstract String processPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException;
+            throws ServletException, IOException, PageNotFoundException;
 }

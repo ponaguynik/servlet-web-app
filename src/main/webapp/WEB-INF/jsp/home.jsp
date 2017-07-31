@@ -7,7 +7,7 @@
 <body>
 <c:choose>
     <c:when test="${sessionScope.user != null}">
-        <h2><c:out value="Hello ${sessionScope.user.username}!"/></h2><br>
+        <p><c:out value="Hello ${sessionScope.user.username}!"/></p>
         <form method="post" action="<c:url value="/logout"/>">
             <input type="submit" value="Logout">
         </form>
@@ -16,5 +16,7 @@
         <a href="<c:url value="/login"/>">Login</a>
     </c:otherwise>
 </c:choose>
+<br>
+<a href="<c:url value="/categories"/>">Categories</a>
 </body>
 </html>

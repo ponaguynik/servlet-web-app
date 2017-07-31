@@ -6,18 +6,17 @@ import com.ponagayba.exception.PageNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class RequestHelper {
+public class DispatcherHelper {
 
     private static final String CTRL_PATH = "com.ponagayba.controller.";
 
-    private HttpServletRequest request;
+    private String uri;
 
-    public RequestHelper(HttpServletRequest request) {
-        this.request = request;
+    public DispatcherHelper(String uri) {
+        this.uri = uri;
     }
 
     public Controller getController() throws PageNotFoundException {
-        String uri = request.getRequestURI();
         if (uri.equals("/"))
             return new HomeController();
         String name = uri.split("/")[1];

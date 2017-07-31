@@ -2,7 +2,7 @@ package com.ponagayba.servlet;
 
 import com.ponagayba.controller.Controller;
 import com.ponagayba.exception.PageNotFoundException;
-import com.ponagayba.util.RequestHelper;
+import com.ponagayba.util.DispatcherHelper;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -29,7 +29,7 @@ public class DispatcherServlet extends HttpServlet {
             throws ServletException, IOException {
         String page;
 
-        RequestHelper helper = new RequestHelper(req);
+        DispatcherHelper helper = new DispatcherHelper(req.getRequestURI());
         try {
             Controller controller = helper.getController();
             page = controller.process(req, resp);
