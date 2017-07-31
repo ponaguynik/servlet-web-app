@@ -1,6 +1,9 @@
 package com.ponagayba.controller;
 
+import com.ponagayba.exception.PageNotFoundException;
+import com.ponagayba.factory.Factory;
 import com.ponagayba.model.User;
+import com.ponagayba.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +24,14 @@ public class LoginController extends Controller {
 
     @Override
     protected String processPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, PageNotFoundException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         User user = new User(username, password);
+        if (Factory.getUserService().getUser(user) == null) {
+            request.setAttribute("message", "User does not exist");
+            return "login";
+        }
         request.getSession().setAttribute("user", user);
         return "home";
     }
