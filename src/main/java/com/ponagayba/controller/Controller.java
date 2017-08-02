@@ -21,9 +21,9 @@ public abstract class Controller {
             throw new UnsupportedOperationException();
     }
 
-    protected String chain(HttpServletRequest request, HttpServletResponse response, String target)
+    protected String chain(HttpServletRequest request, HttpServletResponse response, String controllerName)
             throws ServletException, IOException, PageNotFoundException {
-        return DispatcherHelper.getController(target).process(request, response);
+        return DispatcherHelper.getController(controllerName).process(request, response);
     }
 
     protected abstract String processGet(HttpServletRequest request, HttpServletResponse response)

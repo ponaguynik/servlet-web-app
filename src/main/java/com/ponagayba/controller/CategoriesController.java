@@ -3,6 +3,7 @@ package com.ponagayba.controller;
 import com.ponagayba.exception.PageNotFoundException;
 import com.ponagayba.factory.Factory;
 import com.ponagayba.model.Category;
+import com.ponagayba.util.URIParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,8 @@ public class CategoriesController extends Controller {
     @Override
     protected String processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, PageNotFoundException {
-        if (request.getRequestURI().split("/").length > 2) {
-            return chain(request, response, "/category");
+        if (URIParser.parse(request.getRequestURI()).length > 1) {
+            return chain(request, response, "category");
         }
         List<Category> categories = Factory.getCategoryService().getAll();
         request.setAttribute("categories", categories);

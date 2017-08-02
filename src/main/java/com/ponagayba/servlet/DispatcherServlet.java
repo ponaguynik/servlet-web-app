@@ -3,6 +3,7 @@ package com.ponagayba.servlet;
 import com.ponagayba.controller.Controller;
 import com.ponagayba.exception.PageNotFoundException;
 import com.ponagayba.util.DispatcherHelper;
+import com.ponagayba.util.URIParser;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,8 +29,9 @@ public class DispatcherServlet extends HttpServlet {
     private void processRequest(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String page;
+        String controllerName = URIParser.parse(req.getRequestURI())[0];
         try {
-            Controller controller = DispatcherHelper.getController(req.getRequestURI());
+            Controller controller = DispatcherHelper.getController(controllerName);
             page = controller.process(req, resp);
         } catch (PageNotFoundException e) {
             resp.sendError(404);

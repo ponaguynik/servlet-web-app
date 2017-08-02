@@ -3,6 +3,7 @@ package com.ponagayba.controller;
 import com.ponagayba.exception.PageNotFoundException;
 import com.ponagayba.factory.Factory;
 import com.ponagayba.model.Product;
+import com.ponagayba.util.URIParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +16,12 @@ public class CategoryController extends Controller {
     @Override
     protected String processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, PageNotFoundException {
-        String category = request.getRequestURI().split("/")[2];
-        List<Product> products = Factory.getProductService().getAllOfCategory(category);
+        String categoryName = URIParser.parse(request.getRequestURI())[1];
+        List<Product> products = Factory.getProductService().getAllOfCategory(categoryName);
         if (products == null)
             throw new PageNotFoundException();
         request.setAttribute("products", products);
-        request.setAttribute("category", category);
+        request.setAttribute("category", categoryName);
         return "products";
     }
 

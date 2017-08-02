@@ -3,7 +3,6 @@ package com.ponagayba.controller;
 import com.ponagayba.exception.PageNotFoundException;
 import com.ponagayba.factory.Factory;
 import com.ponagayba.model.User;
-import com.ponagayba.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class LoginController extends Controller {
+
+    private static final String INCORRECT = "The username or password is incorrect";
 
     @Override
     protected String processGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,7 +30,7 @@ public class LoginController extends Controller {
         String password = request.getParameter("password");
         User user = new User(username, password);
         if (Factory.getUserService().getUser(user) == null) {
-            request.setAttribute("message", "User does not exist");
+            request.setAttribute("message", INCORRECT);
             return "login";
         }
         request.getSession().setAttribute("user", user);
