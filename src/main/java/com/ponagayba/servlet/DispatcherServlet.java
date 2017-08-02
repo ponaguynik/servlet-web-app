@@ -28,10 +28,8 @@ public class DispatcherServlet extends HttpServlet {
     private void processRequest(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String page;
-
-        DispatcherHelper helper = new DispatcherHelper(req.getRequestURI());
         try {
-            Controller controller = helper.getController();
+            Controller controller = DispatcherHelper.getController(req.getRequestURI());
             page = controller.process(req, resp);
         } catch (PageNotFoundException e) {
             resp.sendError(404);

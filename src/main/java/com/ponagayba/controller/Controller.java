@@ -23,8 +23,7 @@ public abstract class Controller {
 
     protected String chain(HttpServletRequest request, HttpServletResponse response, String target)
             throws ServletException, IOException, PageNotFoundException {
-        DispatcherHelper helper = new DispatcherHelper(target);
-        return helper.getController().process(request, response);
+        return DispatcherHelper.getController(target).process(request, response);
     }
 
     protected abstract String processGet(HttpServletRequest request, HttpServletResponse response)

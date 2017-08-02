@@ -10,15 +10,10 @@ public class DispatcherHelper {
 
     private static final String CTRL_PATH = "com.ponagayba.controller.";
 
-    private String uri;
-
-    public DispatcherHelper(String uri) {
-        this.uri = uri;
-    }
-
-    public Controller getController() throws PageNotFoundException {
-        if (uri.equals("/"))
+    public static Controller getController(String uri) throws PageNotFoundException {
+        if (uri.equals("/")) {
             return new HomeController();
+        }
         String name = uri.split("/")[1];
         String typeName = name.substring(0, 1).toUpperCase() + name.substring(1);
         try {
