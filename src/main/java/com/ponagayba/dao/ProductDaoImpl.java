@@ -33,6 +33,9 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public List<Product> getAllOfCategory(String categoryName) {
+        List<Product> result = products.get(categoryName);
+        if (result == null)
+            return null;
         return new ArrayList<>(products.get(categoryName));
     }
 

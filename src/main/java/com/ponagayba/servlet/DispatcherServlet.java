@@ -1,53 +1,52 @@
 package com.ponagayba.servlet;
 
 import com.ponagayba.controller.Controller;
+import com.ponagayba.controller.ControllerMapping;
+import com.ponagayba.controller.ModelAndView;
 import com.ponagayba.exception.PageNotFoundException;
-import com.ponagayba.util.DispatcherHelper;
-import com.ponagayba.util.URIParser;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 public class DispatcherServlet extends HttpServlet {
 
+    private static final String JSP_LOCATION = "/WEB-INF/jsp/%s.jsp";
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(req, resp);
+        processRequest(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(req, resp);
+        processRequest(request, response);
     }
 
-    private void processRequest(HttpServletRequest req, HttpServletResponse resp)
+    private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String page;
-        String controllerName = URIParser.parse(req.getRequestURI())[0];
         try {
-            Controller controller = DispatcherHelper.getController(controllerName);
-            page = controller.process(req, resp);
+            Controller controller = ControllerMapping.getController(request);
+            ModelAndView modelAndView = controller.process(request, response);
+            render(modelAndView, request, response);
         } catch (PageNotFoundException e) {
-            resp.sendError(404);
-            return;
+            response.sendError(404);
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendError(500);
-            return;
+            response.sendError(500);
         }
-        dispatch(req, resp, page);
     }
 
-    private void dispatch(HttpServletRequest request, HttpServletResponse response, String page)
+    public void render(ModelAndView modelAndView, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        page = String.format("/WEB-INF/jsp/%s.jsp", page);
-        RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-        dispatcher.forward(request, response);
+        for (Map.Entry<String, Object> entry : modelAndView.getModel().entrySet()) {
+            request.setAttribute(entry.getKey(), entry.getValue());
+        }
+        request.getRequestDispatcher(String.format(JSP_LOCATION, modelAndView.getView())).forward(request, response);
     }
 }

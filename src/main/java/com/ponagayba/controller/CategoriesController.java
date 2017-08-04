@@ -3,7 +3,6 @@ package com.ponagayba.controller;
 import com.ponagayba.exception.PageNotFoundException;
 import com.ponagayba.factory.Factory;
 import com.ponagayba.model.Category;
-import com.ponagayba.util.URIParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,18 +13,16 @@ import java.util.List;
 public class CategoriesController extends Controller {
 
     @Override
-    protected String processGet(HttpServletRequest request, HttpServletResponse response)
+    protected ModelAndView processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, PageNotFoundException {
-        if (URIParser.parse(request.getRequestURI()).length > 1) {
-            return chain(request, response, "category");
-        }
+        ModelAndView result = new ModelAndView("categories");
         List<Category> categories = Factory.getCategoryService().getAll();
-        request.setAttribute("categories", categories);
-        return "categories";
+        result.addAttribute("categories", categories);
+        return result;
     }
 
     @Override
-    protected String processPost(HttpServletRequest request, HttpServletResponse response)
+    protected ModelAndView processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         throw new UnsupportedOperationException();
     }

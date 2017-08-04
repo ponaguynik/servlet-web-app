@@ -8,13 +8,13 @@ import java.io.IOException;
 public class HomeController extends Controller {
 
     @Override
-    protected String processGet(HttpServletRequest request, HttpServletResponse response)
+    protected ModelAndView processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        return "home";
+        return new ModelAndView("home");
     }
 
     @Override
-    protected String processPost(HttpServletRequest request, HttpServletResponse response)
+    protected ModelAndView processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         throw new UnsupportedOperationException();
     }

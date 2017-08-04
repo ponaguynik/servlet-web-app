@@ -15,25 +15,32 @@ public class LoginController extends Controller {
     private static final String INCORRECT = "The username or password is incorrect";
 
     @Override
-    protected String processGet(HttpServletRequest request, HttpServletResponse response)
+    protected ModelAndView processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ModelAndView result = new ModelAndView();
         HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("user") != null)
-            return "home";
-        return "login";
+        if (session != null && session.getAttribute("user") != null) {
+            result.setView("home");
+        } else {
+            result.setView("login");
+        }
+        return result;
     }
 
     @Override
-    protected String processPost(HttpServletRequest request, HttpServletResponse response)
+    protected ModelAndView processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, PageNotFoundException {
+        ModelAndView result = new ModelAndView();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         User user = new User(username, password);
         if (Factory.getUserService().getUser(user) == null) {
-            request.setAttribute("message", INCORRECT);
-            return "login";
+            result.addAttribute("error", INCORRECT);
+            result.setView("login");
+        } else {
+            request.getSession().setAttribute("user", user);
+            result.setView("home");
         }
-        request.getSession().setAttribute("user", user);
-        return "home";
+        return result;
     }
 }

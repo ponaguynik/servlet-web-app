@@ -9,17 +9,18 @@ import java.io.IOException;
 public class LogoutController extends Controller {
 
     @Override
-    protected String processGet(HttpServletRequest request, HttpServletResponse response)
+    protected ModelAndView processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected String processPost(HttpServletRequest request, HttpServletResponse response)
+    protected ModelAndView processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ModelAndView result = new ModelAndView("home");
         HttpSession session = request.getSession(false);
         if (session != null)
             session.invalidate();
-        return "home";
+        return result;
     }
 }
