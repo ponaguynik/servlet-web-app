@@ -40,6 +40,15 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
+    public Product getProductByName(String category, String name) {
+        for (Product product : products.get(category)) {
+            if (product.getName().equals(name))
+                return product;
+        }
+        return null;
+    }
+
+    @Override
     public Product create(Product product) {
         return null;
     }

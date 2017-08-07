@@ -17,4 +17,9 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getAllOfCategory(String categoryName) {
         return productDao.getAllOfCategory(categoryName);
     }
+
+    @Override
+    public Product getProduct(String category, String name) {
+        return productDao.getProductByName(category, name);
+    }
 }

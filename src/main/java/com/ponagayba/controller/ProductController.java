@@ -8,20 +8,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-public class CategoryController extends Controller {
+public class ProductController extends Controller {
 
     @Override
     protected ModelAndView processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, PageNotFoundException {
-        ModelAndView result = new ModelAndView("category");
-        String categoryName = request.getParameter("name");
-        List<Product> products = Factory.getProductService().getAllOfCategory(categoryName);
-        if (products == null)
+        ModelAndView result = new ModelAndView("product");
+        Product product = Factory.getProductService().getProduct(request.getParameter("category"),
+                request.getParameter("name"));
+        if (product == null)
             throw new PageNotFoundException();
-        result.addAttribute("category", request.getParameter("category"));
-        result.addAttribute("products", products);
+        result.addAttribute("product", product);
         return result;
     }
 
