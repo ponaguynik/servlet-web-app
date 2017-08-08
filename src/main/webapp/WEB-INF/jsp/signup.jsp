@@ -1,17 +1,28 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Sign Up Page</title>
-</head>
-<body>
+<jsp:include page="header.jsp">
+    <jsp:param name="css" value="signUp.css" />
+</jsp:include>
+<div id="login-form">
+    <h2>Sign Up</h2>
     <c:if test="${requestScope.error != null}">
-        <p style="color: red;"><c:out value="${requestScope.error}"/></p>
+        <br>
+        <p style="color: red;"><c:out value="${requestScope.error}" /></p>
     </c:if>
-    <form action="/signup" method="post">
-        Username: <input type="text" title="username" name="username" required><br>
-        Password: <input type="password" title="password" name="password" required><br>
-        <input type="submit" value="Sign Up">
+    <form action="<c:url value="/signup"/>" method="post">
+        <div id="form-container" class="flex-container">
+            <label for="username-input">Username:</label>
+            <input id="username-input" type="text" name="username" maxlength="15" required>
+            <br>
+            <label for="password-input">Password:</label>
+            <input id="password-input" type="password" name="password" maxlength="15" required>
+            <br>
+            <label for="conf-password-input">Confirm Password:</label>
+            <input id="conf-password-input" type="password" name="confPassword" maxlength="15" required>
+            <br>
+            <input id="submit" type="submit" value="Confirm">
+            <a href="<c:url value="/login"/>" id="sign-in">Login</a>
+        </div>
     </form>
-</body>
-</html>
+</div>
+<jsp:include page="footer.jsp" />

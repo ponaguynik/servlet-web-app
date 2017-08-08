@@ -26,16 +26,27 @@ public class SignUpController extends Controller {
         ModelAndView result = new ModelAndView();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String confPassword = request.getParameter("confPassword");
 
-        UserService userService = Factory.getUserService();
-        if (userService.userExists(username)) {
-            result.setView("signup");
-            result.addAttribute("error", "Username with such username already exists.");
-        } else {
-            User user = new User(username, password);
-            userService.createNewUser(user);
+        String validationResult = validate(username, password, confPassword);
+        if (validationResult == null) {
+            Factory.getUserService().createNewUser(new User(username, password));
             result.setView("home");
             result.addAttribute("message", "User has been successfully created!");
+        } else {
+            result.setView("signup");
+            result.addAttribute("error", validationResult);
+        }
+        return result;
+    }
+
+    private String validate(String username, String password, String confPassword) throws SQLException {
+        String result = null;
+        UserService userService = Factory.getUserService();
+        if (userService.userExists(username)) {
+            result = "Username with such username already exists.";
+        } else if (!password.equals(confPassword)) {
+            result = "Password does not match the confirm password.";
         }
         return result;
     }

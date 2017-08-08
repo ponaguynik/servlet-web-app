@@ -1,17 +1,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Login Page</title>
-</head>
-<body>
-<c:if test="${requestScope.message != null}">
-    <p style="color: red;">${requestScope.message}</p>
-</c:if>
-<form method="post" action="<c:url value="/login"/>">
-    <input title="Username" type="text" name="username"><br>
-    <input title="Password" type="password" name="password"><br>
-    <input type="submit" value="Login">
-</form>
-</body>
-</html>
+<jsp:include page="header.jsp">
+    <jsp:param name="css" value="signIn.css" />
+</jsp:include>
+<main>
+    <h2>Login</h2>
+    <c:if test="${requestScope.error != null}">
+        <br>
+        <p style="color: red;"><c:out value="${requestScope.error}" /></p>
+    </c:if>
+    <form action="<c:url value="/login"/>" method="post">
+        <div class="form-container flex-container">
+            <label for="username-input">Username:</label>
+            <input id="username-input" type="text" name="username" maxlength="15" required>
+            <br>
+            <label for="password-input">Password:</label>
+            <input id="password-input" type="password" name="password" maxlength="15" required>
+            <br>
+            <input class="btn" type="submit" value="Sign In">
+            <a href="<c:url value="/signup"/>" class="sign-up">Sign Up</a>
+        </div>
+    </form>
+</main>
+<jsp:include page="footer.jsp" />
