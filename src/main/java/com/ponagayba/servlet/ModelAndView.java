@@ -1,4 +1,4 @@
-package com.ponagayba.controller;
+package com.ponagayba.servlet;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,10 +21,6 @@ public class ModelAndView {
     public ModelAndView addAttribute(String attributeName, Object attributeValue) {
         model.put(attributeName, attributeValue);
         return this;
-    }
-
-    public boolean isEmpty() {
-        return (view == null && model.isEmpty());
     }
 
     public String getView() {

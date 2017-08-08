@@ -5,6 +5,9 @@
     <title>Home Page</title>
 </head>
 <body>
+<c:if test="${requestScope.message != null}">
+    <p style="color: green;"><c:out value="${requestScope.message}"/></p>
+</c:if>
 <c:choose>
     <c:when test="${sessionScope.user != null}">
         <p><c:out value="Hello ${sessionScope.user.username}!"/></p>
@@ -16,7 +19,6 @@
         <a href="<c:url value="/login"/>">Login</a>
     </c:otherwise>
 </c:choose>
-<br>
 <a href="<c:url value="/categories"/>">Categories</a>
 </body>
 </html>

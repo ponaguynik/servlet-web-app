@@ -2,6 +2,7 @@ package com.ponagayba.dao;
 
 import com.ponagayba.model.Product;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,18 +50,18 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public Product create(Product product) {
-        return null;
+    public boolean create(Product product) throws SQLException {
+        return false;
     }
 
     @Override
-    public Product update(Product product) {
-        return null;
+    public boolean update(Product product) {
+        return false;
     }
 
     @Override
-    public Product delete(Product product) {
-        return null;
+    public boolean delete(Product product) {
+        return false;
     }
 
     @Override

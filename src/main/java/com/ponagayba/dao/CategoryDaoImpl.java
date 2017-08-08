@@ -2,6 +2,7 @@ package com.ponagayba.dao;
 
 import com.ponagayba.model.Category;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,18 +17,18 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Category create(Category category) {
-        return null;
+    public boolean create(Category category) throws SQLException {
+        return false;
     }
 
     @Override
-    public Category update(Category category) {
-        return null;
+    public boolean update(Category category) {
+        return false;
     }
 
     @Override
-    public Category delete(Category category) {
-        return null;
+    public boolean delete(Category category) {
+        return false;
     }
 
     @Override

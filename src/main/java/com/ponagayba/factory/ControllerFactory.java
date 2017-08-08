@@ -27,4 +27,8 @@ public class ControllerFactory {
     public static Controller getProductController() {
         return new ProductController();
     }
+
+    public static Controller getSignUpController() {
+        return new SignUpController();
+    }
 }

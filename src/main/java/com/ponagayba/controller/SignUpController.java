@@ -3,6 +3,7 @@ package com.ponagayba.controller;
 import com.ponagayba.exception.PageNotFoundException;
 import com.ponagayba.factory.Factory;
 import com.ponagayba.model.User;
+import com.ponagayba.service.UserService;
 import com.ponagayba.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
@@ -11,14 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class LoginController extends Controller {
-
-    private static final String INCORRECT = "The username or password is incorrect";
+public class SignUpController extends Controller {
 
     @Override
     protected ModelAndView processGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        return new ModelAndView("login");
+            throws ServletException, IOException, PageNotFoundException {
+        return new ModelAndView("signup");
     }
 
     @Override
@@ -27,13 +26,16 @@ public class LoginController extends Controller {
         ModelAndView result = new ModelAndView();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        User user = new User(username, password);
-        if (Factory.getUserService().getUser(user) == null) {
-            result.addAttribute("error", INCORRECT);
-            result.setView("login");
+
+        UserService userService = Factory.getUserService();
+        if (userService.userExists(username)) {
+            result.setView("signup");
+            result.addAttribute("error", "Username with such username already exists.");
         } else {
-            request.getSession().setAttribute("user", user);
+            User user = new User(username, password);
+            userService.createNewUser(user);
             result.setView("home");
+            result.addAttribute("message", "User has been successfully created!");
         }
         return result;
     }

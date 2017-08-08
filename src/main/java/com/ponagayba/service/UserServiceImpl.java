@@ -3,6 +3,8 @@ package com.ponagayba.service;
 import com.ponagayba.dao.UserDao;
 import com.ponagayba.model.User;
 
+import java.sql.SQLException;
+
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
@@ -12,7 +14,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(User user) {
+    public User getUser(User user) throws SQLException {
         return userDao.getUser(user);
+    }
+
+    @Override
+    public boolean userExists(String username) throws SQLException {
+        return userDao.userExists(username);
+    }
+
+    @Override
+    public boolean createNewUser(User user) throws SQLException {
+        return userDao.create(user);
     }
 }

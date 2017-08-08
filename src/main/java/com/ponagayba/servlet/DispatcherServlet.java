@@ -1,7 +1,6 @@
 package com.ponagayba.servlet;
 
 import com.ponagayba.controller.Controller;
-import com.ponagayba.controller.ModelAndView;
 import com.ponagayba.exception.PageNotFoundException;
 import com.ponagayba.factory.ControllerFactory;
 
@@ -29,6 +28,8 @@ public class DispatcherServlet extends HttpServlet {
         controllerMap.put("GET/pages/categories", ControllerFactory.getCategoriesController());
         controllerMap.put("GET/pages/category", ControllerFactory.getCategoryController());
         controllerMap.put("GET/pages/product", ControllerFactory.getProductController());
+        controllerMap.put("GET/pages/signup", ControllerFactory.getSignUpController());
+        controllerMap.put("POST/pages/signup", ControllerFactory.getSignUpController());
     }
 
     public Controller getController(HttpServletRequest request) throws PageNotFoundException {

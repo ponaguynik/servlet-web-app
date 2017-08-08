@@ -2,7 +2,11 @@ package com.ponagayba.dao;
 
 import com.ponagayba.model.User;
 
+import java.sql.SQLException;
+
 public interface UserDao extends GenericDao<User> {
 
-    User getUser(User user);
+    User getUser(User user) throws SQLException;
+
+    boolean userExists(String username) throws SQLException;
 }
