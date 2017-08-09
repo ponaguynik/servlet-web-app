@@ -1,0 +1,11 @@
+main {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+td {
+    padding: 5px;
+    text-align: center;
+    font-size: 120%;
+}

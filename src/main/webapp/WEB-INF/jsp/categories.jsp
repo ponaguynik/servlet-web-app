@@ -1,13 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Categories</title>
-</head>
-<body>
-    <a href="<c:url value="/"/>">Home Page</a>
-    <br>
-    <ul>
+<jsp:include page="header.jsp">
+    <jsp:param name="css" value="categories.css" />
+    <jsp:param name="title" value="Categories" />
+</jsp:include>
+<main class="flex-container">
+    <ul class="flex-container">
         <c:forEach var="category" items="${requestScope.categories}">
             <li><a href="
                     <c:url value="/category">
@@ -16,5 +14,5 @@
                     ${category.name}</a></li>
         </c:forEach>
     </ul>
-</body>
-</html>
+</main>
+<jsp:include page="footer.jsp" />

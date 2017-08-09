@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/reset.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/style.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/${param.css}">
-    <title>Web App</title>
+    <title>${param.title}</title>
 </head>
 <body>
 <div id="content">

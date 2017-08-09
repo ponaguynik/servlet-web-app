@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp">
     <jsp:param name="css" value="signIn.css" />
+    <jsp:param name="title" value="Login" />
 </jsp:include>
 <main>
     <h2>Login</h2>
