@@ -25,6 +25,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean createNewUser(User user) throws SQLException {
-        return userDao.create(user);
+        if (userDao.userExists(user.getUsername()))
+            return false;
+        userDao.create(user);
+        return true;
+    }
+
+    @Override
+    public void close() throws SQLException {
+        userDao.close();
     }
 }

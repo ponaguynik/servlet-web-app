@@ -23,7 +23,7 @@ public abstract class Controller {
     }
 
     protected abstract ModelAndView processGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, PageNotFoundException;
+            throws ServletException, IOException, PageNotFoundException, SQLException;
 
     protected abstract ModelAndView processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, PageNotFoundException, SQLException;

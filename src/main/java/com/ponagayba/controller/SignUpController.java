@@ -1,7 +1,7 @@
 package com.ponagayba.controller;
 
 import com.ponagayba.exception.PageNotFoundException;
-import com.ponagayba.factory.Factory;
+import com.ponagayba.factory.ServiceFactory;
 import com.ponagayba.model.User;
 import com.ponagayba.service.UserService;
 import com.ponagayba.servlet.ModelAndView;
@@ -30,7 +30,7 @@ public class SignUpController extends Controller {
 
         String validationResult = validate(username, password, confPassword);
         if (validationResult == null) {
-            Factory.getUserService().createNewUser(new User(username, password));
+            ServiceFactory.getUserService().createNewUser(new User(username, password));
             result.setView("home");
             result.addAttribute("message", "User has been successfully created!");
         } else {
@@ -42,7 +42,7 @@ public class SignUpController extends Controller {
 
     private String validate(String username, String password, String confPassword) throws SQLException {
         String result = null;
-        UserService userService = Factory.getUserService();
+        UserService userService = ServiceFactory.getUserService();
         if (userService.userExists(username)) {
             result = "Username with such username already exists.";
         } else if (!password.equals(confPassword)) {

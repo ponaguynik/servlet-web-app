@@ -2,25 +2,23 @@ package com.ponagayba.model;
 
 public class Product {
 
-    //Primary key
-    private Long id;
-    //Foreign key
+    private int id;
     private String category;
     private String name;
     private Double price;
 
-    public Product(Long id, String category, String name, Double price) {
+    public Product(int id, String category, String name, Double price) {
         this.id = id;
         this.category = category;
         this.name = name;
         this.price = price;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

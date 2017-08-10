@@ -1,7 +1,7 @@
 package com.ponagayba.controller;
 
 import com.ponagayba.exception.PageNotFoundException;
-import com.ponagayba.factory.Factory;
+import com.ponagayba.factory.ServiceFactory;
 import com.ponagayba.model.Product;
 import com.ponagayba.servlet.ModelAndView;
 
@@ -9,15 +9,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ProductController extends Controller {
 
     @Override
     protected ModelAndView processGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, PageNotFoundException {
+            throws ServletException, IOException, PageNotFoundException, SQLException {
         ModelAndView result = new ModelAndView("product");
-        Product product = Factory.getProductService().getProduct(request.getParameter("category"),
-                request.getParameter("name"));
+        int productId = Integer.parseInt(request.getParameter("id"));
+        Product product = ServiceFactory.getProductService().getProduct(productId);
         if (product == null)
             throw new PageNotFoundException();
         result.addAttribute("product", product);

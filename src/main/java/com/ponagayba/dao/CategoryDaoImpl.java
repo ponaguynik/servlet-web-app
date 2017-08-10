@@ -2,42 +2,48 @@ package com.ponagayba.dao;
 
 import com.ponagayba.model.Category;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryDaoImpl implements CategoryDao {
+public class CategoryDaoImpl extends AbstractDao implements CategoryDao {
 
-    private static List<Category> categories = new ArrayList<>();
-
-    static {
-        categories.add(new Category("laptops", null));
-        categories.add(new Category("tablets", null));
-        categories.add(new Category("tvs", null));
+    public CategoryDaoImpl(Connection connection) {
+        super(connection);
     }
 
     @Override
-    public boolean create(Category category) throws SQLException {
-        return false;
+    public void create(Category category) throws SQLException {
+
     }
 
     @Override
-    public boolean update(Category category) {
-        return false;
+    public void update(Category category) throws SQLException {
+
     }
 
     @Override
-    public boolean delete(Category category) {
-        return false;
+    public void delete(int id) throws SQLException {
+
     }
 
     @Override
-    public Category findById(Category category) {
+    public Category findById(int id) throws SQLException {
+
         return null;
     }
 
     @Override
-    public List<Category> getAll() {
-        return new ArrayList<>(categories);
+    public List<Category> getAll() throws SQLException {
+        String query = "SELECT id, name FROM categories";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        List<Category> result = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String name = resultSet.getString("name");
+            result.add(new Category(id, name));
+        }
+        return result;
     }
 }

@@ -2,7 +2,7 @@ package com.ponagayba.model;
 
 public class User {
 
-    private Long id;
+    private int id;
     private String username;
     private String password;
 
@@ -14,11 +14,11 @@ public class User {
         this.password = password;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

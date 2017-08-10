@@ -2,70 +2,74 @@ package com.ponagayba.dao;
 
 import com.ponagayba.model.Product;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class ProductDaoImpl implements ProductDao {
+public class ProductDaoImpl extends AbstractDao implements ProductDao {
 
-    private static Map<String, List<Product>> products = new HashMap<>();
-
-    static {
-        List<Product> laptops = new ArrayList<>();
-        laptops.add(new Product(1L, "laptops", "Lenovo Laptop", 800.0));
-        laptops.add(new Product(2L, "laptops", "Dell Laptop", 1000.0));
-        laptops.add(new Product(3L, "laptops", "Asus Laptop", 1500.0));
-        products.put("laptops", laptops);
-
-        List<Product> tablets = new ArrayList<>();
-        tablets.add(new Product(4L, "tablets", "Lenovo Tablet", 300.0));
-        tablets.add(new Product(5L, "tablets", "Asus Tablet", 500.0));
-        tablets.add(new Product(6L, "tablets", "Apple Tablet", 800.0));
-        products.put("tablets", tablets);
-
-        List<Product> tvs = new ArrayList<>();
-        tvs.add(new Product(7L, "tvs", "Panasonic", 400.0));
-        tvs.add(new Product(8L, "tvs", "LG", 600.0));
-        tvs.add(new Product(9L, "tvs", "Sony", 700.0));
-        products.put("tvs", tvs);
+    public ProductDaoImpl(Connection connection) {
+        super(connection);
     }
 
     @Override
-    public List<Product> getAllOfCategory(String categoryName) {
-        List<Product> result = products.get(categoryName);
-        if (result == null)
-            return null;
-        return new ArrayList<>(products.get(categoryName));
+    public List<Product> getAllOfCategory(int id) throws SQLException {
+        List<Product> result = new ArrayList<>();
+        String query =
+                "SELECT products.id AS id, categories.name AS category, products.name AS name, products.price AS price " +
+                "FROM products " +
+                "JOIN categories " +
+                "ON products.category_id=categories.id " +
+                "WHERE category_id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            int product_id = resultSet.getInt("id");
+            String category = resultSet.getString("category");
+            String name = resultSet.getString("name");
+            double price = resultSet.getDouble("price");
+            Product product = new Product(product_id, category, name, price);
+            result.add(product);
+        }
+        return result;
     }
 
     @Override
-    public Product getProductByName(String category, String name) {
-        for (Product product : products.get(category)) {
-            if (product.getName().equals(name))
-                return product;
+    public Product findById(int id) throws SQLException {
+        String query =
+                "SELECT categories.name AS category, products.name AS name, products.price AS price " +
+                "FROM products " +
+                "JOIN categories " +
+                "ON products.category_id=categories.id " +
+                "WHERE products.id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            String category = resultSet.getString("category");
+            String name = resultSet.getString("name");
+            double price = resultSet.getDouble("price");
+            return new Product(id, category, name, price);
         }
         return null;
     }
 
     @Override
-    public boolean create(Product product) throws SQLException {
-        return false;
+    public void create(Product product) throws SQLException {
+
     }
 
     @Override
-    public boolean update(Product product) {
-        return false;
+    public void update(Product product) throws SQLException {
+
     }
 
     @Override
-    public boolean delete(Product product) {
-        return false;
-    }
+    public void delete(int id) throws SQLException {
 
-    @Override
-    public Product findById(Product product) {
-        return null;
     }
 }

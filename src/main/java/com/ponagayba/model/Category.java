@@ -4,13 +4,21 @@ import java.util.List;
 
 public class Category {
 
-    //Primary key
+    private int id;
     private String name;
     private List<Product> products;
 
-    public Category(String name, List<Product> products) {
+    public Category(int id, String name) {
+        this.id = id;
         this.name = name;
-        this.products = products;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

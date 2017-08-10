@@ -3,10 +3,13 @@ package com.ponagayba.dao;
 
 import java.sql.SQLException;
 
-public interface GenericDao<T> {
+public interface GenericDao<T> extends AutoCloseable {
 
-    boolean create(T t) throws SQLException;
-    boolean update(T t);
-    boolean delete(T t);
-    T findById(T t);
+    void create(T t) throws SQLException;
+    void update(T t) throws SQLException;
+    void delete(int id) throws SQLException;
+    T findById(int id) throws SQLException;
+
+    @Override
+    void close() throws SQLException;
 }

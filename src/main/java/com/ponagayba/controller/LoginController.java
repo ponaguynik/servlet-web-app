@@ -1,7 +1,7 @@
 package com.ponagayba.controller;
 
 import com.ponagayba.exception.PageNotFoundException;
-import com.ponagayba.factory.Factory;
+import com.ponagayba.factory.ServiceFactory;
 import com.ponagayba.model.User;
 import com.ponagayba.servlet.ModelAndView;
 
@@ -28,7 +28,7 @@ public class LoginController extends Controller {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         User user = new User(username, password);
-        if (Factory.getUserService().getUser(user) == null) {
+        if (ServiceFactory.getUserService().getUser(user) == null) {
             result.addAttribute("error", INCORRECT);
             result.setView("login");
         } else {
