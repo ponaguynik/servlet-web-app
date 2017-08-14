@@ -24,11 +24,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean createNewUser(User user) throws SQLException {
-        if (userDao.userExists(user.getUsername()))
-            return false;
+    public void createNewUser(User user) throws SQLException {
         userDao.create(user);
-        return true;
+    }
+
+    @Override
+    public void updateToken(User user) throws SQLException {
+        userDao.updateToken(user);
+    }
+
+    @Override
+    public User findByToken(String token) throws SQLException {
+        return userDao.findByToken(token);
+    }
+
+    @Override
+    public void removeToken(String token) throws SQLException {
+        userDao.removeToken(token);
     }
 
     @Override

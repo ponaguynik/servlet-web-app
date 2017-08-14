@@ -30,6 +30,7 @@ public class DispatcherServlet extends HttpServlet {
         controllerMap.put("GET/pages/product", ControllerFactory.getProductController());
         controllerMap.put("GET/pages/signup", ControllerFactory.getSignUpController());
         controllerMap.put("POST/pages/signup", ControllerFactory.getSignUpController());
+        controllerMap.put("GET/pages/profile", ControllerFactory.getProfileController());
     }
 
     public Controller getController(HttpServletRequest request) throws PageNotFoundException {
@@ -72,6 +73,10 @@ public class DispatcherServlet extends HttpServlet {
         for (Map.Entry<String, Object> entry : modelAndView.getModel().entrySet()) {
             request.setAttribute(entry.getKey(), entry.getValue());
         }
-        request.getRequestDispatcher(String.format(JSP_LOCATION, modelAndView.getView())).forward(request, response);
+        if (modelAndView.getView().equals(request.getPathInfo().substring(1))) {
+            request.getRequestDispatcher(String.format(JSP_LOCATION, modelAndView.getView())).forward(request, response);
+        } else {
+            response.sendRedirect(modelAndView.getView());
+        }
     }
 }

@@ -14,14 +14,12 @@
     <nav class="flex-container">
         <a href="<c:url value="/home"/>">Home</a>
         <a href="<c:url value="/categories"/>">Categories</a>
-        <c:if test="${sessionScope.user.username == 'admin'}">
-            <a href="<%= response.encodeURL("addQuestion.jsp") %>">Add Question</a>
-        </c:if>
         <c:choose>
-            <c:when test="${empty sessionScope.user}">
+            <c:when test="${cookie.TOKEN == null}">
                 <a href="<c:url value="/login"/>" class="login-menu-item"><img src="${pageContext.request.contextPath}/resources/images/login.png" alt="Login"></a>
             </c:when>
             <c:otherwise>
+                <a href="<c:url value="/profile"/>">Profile</a>
                 <form class="login-menu-item" action="<c:url value="/logout"/>" method="post">
                     <input type="image" src="${pageContext.request.contextPath}/resources/images/logout.png" alt="Logout">
                 </form>

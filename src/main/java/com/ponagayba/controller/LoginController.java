@@ -6,6 +6,7 @@ import com.ponagayba.model.User;
 import com.ponagayba.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,13 +29,20 @@ public class LoginController extends Controller {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         User user = new User(username, password);
-        if (ServiceFactory.getUserService().getUser(user) == null) {
-            result.addAttribute("error", INCORRECT);
-            result.setView("login");
+        if ((user = ServiceFactory.getUserService().getUser(user)) != null) {
+            result.setView("profile");
+            registerToken(user);
+            response.addCookie(new Cookie("TOKEN", user.getToken()));
         } else {
-            request.getSession().setAttribute("user", user);
-            result.setView("home");
+            result.setView("login");
+            result.addAttribute("error", INCORRECT);
         }
         return result;
+    }
+
+    private void registerToken(User user) throws SQLException {
+        String token = user.getUsername() + System.nanoTime();
+        user.setToken(token);
+        ServiceFactory.getUserService().updateToken(user);
     }
 }

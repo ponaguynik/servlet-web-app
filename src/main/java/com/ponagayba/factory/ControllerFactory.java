@@ -31,4 +31,8 @@ public class ControllerFactory {
     public static Controller getSignUpController() {
         return new SignUpController();
     }
+
+    public static Controller getProfileController() {
+        return new ProfileController();
+    }
 }
