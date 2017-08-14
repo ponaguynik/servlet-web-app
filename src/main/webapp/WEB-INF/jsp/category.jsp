@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp">
     <jsp:param name="css" value="categories.css" />
-    <jsp:param name="title" value="${requestScope.category}" />
+    <jsp:param name="title" value="${requestScope.category.name}" />
 </jsp:include>
 <main class="flex-container">
     <ul class="flex-container">

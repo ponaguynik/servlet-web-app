@@ -1,7 +1,7 @@
 package com.ponagayba.controller;
 
 import com.ponagayba.exception.PageNotFoundException;
-import com.ponagayba.factory.ServiceFactory;
+import com.ponagayba.factory.Factory;
 import com.ponagayba.model.User;
 import com.ponagayba.servlet.ModelAndView;
 
@@ -29,7 +29,7 @@ public class LoginController extends Controller {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         User user = new User(username, password);
-        if ((user = ServiceFactory.getUserService().getUser(user)) != null) {
+        if ((user = Factory.getUserService().getUser(user)) != null) {
             result.setView("profile");
             registerToken(user);
             response.addCookie(new Cookie("TOKEN", user.getToken()));
@@ -43,6 +43,6 @@ public class LoginController extends Controller {
     private void registerToken(User user) throws SQLException {
         String token = user.getUsername() + System.nanoTime();
         user.setToken(token);
-        ServiceFactory.getUserService().updateToken(user);
+        Factory.getUserService().updateToken(user);
     }
 }

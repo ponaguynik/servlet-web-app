@@ -1,6 +1,6 @@
 package com.ponagayba.filter;
 
-import com.ponagayba.factory.ServiceFactory;
+import com.ponagayba.factory.Factory;
 import com.ponagayba.model.User;
 
 import javax.servlet.*;
@@ -25,7 +25,7 @@ public class UserFilter implements Filter {
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("TOKEN")) {
                 try {
-                    user = ServiceFactory.getUserService().findByToken(cookie.getValue());
+                    user = Factory.getUserService().findByToken(cookie.getValue());
                 } catch (SQLException e) {
                     throw new ServletException(e);
                 }

@@ -2,7 +2,7 @@ package com.ponagayba.servlet;
 
 import com.ponagayba.controller.Controller;
 import com.ponagayba.exception.PageNotFoundException;
-import com.ponagayba.factory.ControllerFactory;
+import com.ponagayba.factory.Factory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,21 +20,21 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        controllerMap.put("GET/pages/", ControllerFactory.getHomeController());
-        controllerMap.put("GET/pages/home", ControllerFactory.getHomeController());
-        controllerMap.put("GET/pages/login", ControllerFactory.getLoginController());
-        controllerMap.put("POST/pages/login", ControllerFactory.getLoginController());
-        controllerMap.put("POST/pages/logout", ControllerFactory.getLogoutController());
-        controllerMap.put("GET/pages/categories", ControllerFactory.getCategoriesController());
-        controllerMap.put("GET/pages/category", ControllerFactory.getCategoryController());
-        controllerMap.put("GET/pages/product", ControllerFactory.getProductController());
-        controllerMap.put("GET/pages/signup", ControllerFactory.getSignUpController());
-        controllerMap.put("POST/pages/signup", ControllerFactory.getSignUpController());
-        controllerMap.put("GET/pages/profile", ControllerFactory.getProfileController());
+        controllerMap.put("GET/pages/", Factory.getHomeController());
+        controllerMap.put("GET/pages/home", Factory.getHomeController());
+        controllerMap.put("GET/pages/login", Factory.getLoginController());
+        controllerMap.put("POST/pages/login", Factory.getLoginController());
+        controllerMap.put("POST/pages/logout", Factory.getLogoutController());
+        controllerMap.put("GET/pages/categories", Factory.getCategoriesController());
+        controllerMap.put("GET/pages/category", Factory.getCategoryController());
+        controllerMap.put("GET/pages/product", Factory.getProductController());
+        controllerMap.put("GET/pages/signup", Factory.getSignUpController());
+        controllerMap.put("POST/pages/signup", Factory.getSignUpController());
+        controllerMap.put("GET/pages/profile", Factory.getProfileController());
     }
 
-    public Controller getController(HttpServletRequest request) throws PageNotFoundException {
-        String methodUri = request.getMethod() + request.getRequestURI();
+    private Controller getController(HttpServletRequest request) throws PageNotFoundException {
+        String methodUri = request.getMethod() + request.getRequestURI().split(";")[0];
         Controller result = controllerMap.get(methodUri);
         if (result == null) {
             throw new PageNotFoundException();
@@ -68,7 +68,7 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    public void render(ModelAndView modelAndView, HttpServletRequest request, HttpServletResponse response)
+    private void render(ModelAndView modelAndView, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         for (Map.Entry<String, Object> entry : modelAndView.getModel().entrySet()) {
             request.setAttribute(entry.getKey(), entry.getValue());

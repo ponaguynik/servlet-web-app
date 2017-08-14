@@ -1,7 +1,7 @@
 package com.ponagayba.controller;
 
 import com.ponagayba.exception.PageNotFoundException;
-import com.ponagayba.factory.ServiceFactory;
+import com.ponagayba.factory.Factory;
 import com.ponagayba.model.Product;
 import com.ponagayba.servlet.ModelAndView;
 
@@ -18,7 +18,7 @@ public class ProductController extends Controller {
             throws ServletException, IOException, PageNotFoundException, SQLException {
         ModelAndView result = new ModelAndView("product");
         int productId = Integer.parseInt(request.getParameter("id"));
-        Product product = ServiceFactory.getProductService().getProduct(productId);
+        Product product = Factory.getProductService().getProduct(productId);
         if (product == null)
             throw new PageNotFoundException();
         result.addAttribute("product", product);

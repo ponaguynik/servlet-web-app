@@ -1,7 +1,7 @@
 package com.ponagayba.controller;
 
 import com.ponagayba.exception.PageNotFoundException;
-import com.ponagayba.factory.ServiceFactory;
+import com.ponagayba.factory.Factory;
 import com.ponagayba.model.Category;
 import com.ponagayba.servlet.ModelAndView;
 
@@ -18,7 +18,7 @@ public class CategoriesController extends Controller {
     protected ModelAndView processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, PageNotFoundException, SQLException {
         ModelAndView result = new ModelAndView("categories");
-        List<Category> categories = ServiceFactory.getCategoryService().getAll();
+        List<Category> categories = Factory.getCategoryService().getAll();
         result.addAttribute("categories", categories);
         return result;
     }
