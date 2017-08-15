@@ -2,12 +2,15 @@ package com.ponagayba.factory;
 
 import com.ponagayba.controller.*;
 import com.ponagayba.dao.*;
+import com.ponagayba.model.Role;
 import com.ponagayba.service.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Factory {
+
+    private static Role roleService;
 
     public static Controller getHomeController() {
         return new HomeController();
@@ -64,8 +67,12 @@ public class Factory {
         return new UserDaoImpl(getConnection());
     }
 
+    public static RoleDao getRoleDao() {
+        return new RoleDaoImpl(getConnection());
+    }
+
     public static UserService getUserService() {
-        return new UserServiceImpl(getUserDao());
+        return new UserServiceImpl(getUserDao(), getRoleDao());
     }
 
     public static ProductService getProductService() {
@@ -74,5 +81,9 @@ public class Factory {
 
     public static CategoryService getCategoryService() {
         return new CategoryServiceImpl(getCategoryDao(), getProductService());
+    }
+
+    public static RoleService getRoleService() {
+        return new RoleServiceImpl(getRoleDao());
     }
 }

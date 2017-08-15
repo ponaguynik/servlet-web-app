@@ -1,5 +1,6 @@
 package com.ponagayba.dao;
 
+import com.ponagayba.model.Role;
 import com.ponagayba.model.User;
 
 import java.sql.Connection;
@@ -16,7 +17,8 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     @Override
     public User getUser(User user) throws SQLException {
        String query =
-               "SELECT * FROM users " +
+               "SELECT id, token " +
+               "FROM users " +
                "WHERE username=? AND password=?";
        PreparedStatement preparedStatement = connection.prepareStatement(query);
        preparedStatement.setString(1, user.getUsername());
@@ -26,8 +28,9 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
        if (resultSet.next()) {
            result = new User();
            result.setId(resultSet.getInt("id"));
-           result.setUsername(resultSet.getString("username"));
-           result.setPassword(resultSet.getString("password"));
+           result.setToken(resultSet.getString("token"));
+           result.setUsername(user.getUsername());
+           result.setPassword(user.getPassword());
        }
        return result;
     }
@@ -69,7 +72,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     @Override
     public User findByToken(String token) throws SQLException {
         String query =
-                "SELECT * " +
+                "SELECT id, username, password " +
                 "FROM users " +
                 "WHERE token=?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -77,12 +80,25 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         ResultSet resultSet = preparedStatement.executeQuery();
         User user = null;
         if (resultSet.next()) {
-            int id = resultSet.getInt("id");
-            String username = resultSet.getString("username");
-            String password = resultSet.getString("password");
-            user = new User(id, username, password, token);
+            user = new User(
+                    resultSet.getInt("id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("password"),
+                    token
+            );
         }
         return user;
+    }
+
+    @Override
+    public void addRole(int userId, Role role) throws SQLException {
+        String query =
+                "INSERT INTO user_to_role(user_id, role_id) " +
+                "VALUES(?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, userId);
+        preparedStatement.setInt(2, role.getId());
+        preparedStatement.execute();
     }
 
     @Override

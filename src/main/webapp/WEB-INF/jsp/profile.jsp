@@ -6,5 +6,9 @@
 </jsp:include>
 <main class="flex-container">
     <h1>Hello, <c:out value="${requestScope.user.username}"/></h1>
+    <h2>Your roles:</h2>
+    <c:forEach var="role" items="${requestScope.user.roles}">
+        <p>${role.id} - ${role.name}</p><br>
+    </c:forEach>
 </main>
 <jsp:include page="footer.jsp" />

@@ -1,6 +1,8 @@
 package com.ponagayba.service;
 
+import com.ponagayba.dao.RoleDao;
 import com.ponagayba.dao.UserDao;
+import com.ponagayba.model.Role;
 import com.ponagayba.model.User;
 
 import java.sql.SQLException;
@@ -8,14 +10,20 @@ import java.sql.SQLException;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
+    private final RoleDao roleDao;
 
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
         this.userDao = userDao;
+        this.roleDao = roleDao;
     }
 
     @Override
     public User getUser(User user) throws SQLException {
-        return userDao.getUser(user);
+        User result = userDao.getUser(user);
+        if (result != null) {
+            result.setRoles(roleDao.getUserRoles(result.getId()));
+        }
+        return result;
     }
 
     @Override
@@ -26,6 +34,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createNewUser(User user) throws SQLException {
         userDao.create(user);
+        User userDB = userDao.getUser(new User(user.getUsername(), user.getPassword()));
+        for (Role role : user.getRoles()) {
+            userDao.addRole(userDB.getId(), role);
+        }
     }
 
     @Override
@@ -35,7 +47,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByToken(String token) throws SQLException {
-        return userDao.findByToken(token);
+        User result = userDao.findByToken(token);
+        if (result != null) {
+            result.setRoles(roleDao.getUserRoles(result.getId()));
+        }
+        return result;
     }
 
     @Override

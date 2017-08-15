@@ -2,7 +2,9 @@ package com.ponagayba.controller;
 
 import com.ponagayba.exception.PageNotFoundException;
 import com.ponagayba.factory.Factory;
+import com.ponagayba.model.Role;
 import com.ponagayba.model.User;
+import com.ponagayba.service.RoleService;
 import com.ponagayba.service.UserService;
 import com.ponagayba.servlet.ModelAndView;
 
@@ -11,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignUpController extends Controller {
 
@@ -30,7 +34,11 @@ public class SignUpController extends Controller {
 
         String validationResult = validate(username, password, confPassword);
         if (validationResult == null) {
-            Factory.getUserService().createNewUser(new User(username, password));
+            User newUser = new User(username, password);
+            List<Role> roles = new ArrayList<>();
+            roles.add(Factory.getRoleService().findByName("user"));
+            newUser.setRoles(roles);
+            Factory.getUserService().createNewUser(newUser);
             result.setView("home");
             result.addAttribute("message", "User has been successfully created!");
         } else {

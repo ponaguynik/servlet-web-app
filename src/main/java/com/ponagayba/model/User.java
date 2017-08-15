@@ -1,25 +1,38 @@
 package com.ponagayba.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 
     private int id;
     private String username;
     private String password;
     private String token;
+    private List<Role> roles;
 
     public User() {
+        roles = new ArrayList<>();
     }
 
     public User(String username, String password) {
+        this();
         this.username = username;
         this.password = password;
     }
 
     public User(int id, String username, String password, String token) {
+        this(username, password);
         this.id = id;
-        this.username = username;
-        this.password = password;
         this.token = token;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public int getId() {
