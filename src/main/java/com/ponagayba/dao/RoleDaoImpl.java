@@ -1,6 +1,7 @@
 package com.ponagayba.dao;
 
 import com.ponagayba.model.Role;
+import com.ponagayba.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -66,6 +67,16 @@ public class RoleDaoImpl extends AbstractDao implements RoleDao {
             ));
         }
         return result;
+    }
+
+    @Override
+    public void deleteUserRoles(int userId) throws SQLException {
+        String query =
+                "DELETE FROM user_to_role " +
+                "WHERE user_id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, userId);
+        preparedStatement.execute();
     }
 
     @Override

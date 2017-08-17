@@ -30,6 +30,7 @@ public class LoginController extends Controller {
         String password = request.getParameter("password");
         User user = new User(username, password);
         if ((user = Factory.getUserService().getUser(user)) != null) {
+            result.setRedirect(true);
             result.setView("profile");
             registerToken(user);
             response.addCookie(new Cookie("TOKEN", user.getToken()));

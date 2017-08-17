@@ -30,16 +30,14 @@ public class SignUpController extends Controller {
         ModelAndView result = new ModelAndView();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String email = request.getParameter("email");
         String confPassword = request.getParameter("confPassword");
 
         String validationResult = validate(username, password, confPassword);
         if (validationResult == null) {
-            User newUser = new User(username, password);
-            List<Role> roles = new ArrayList<>();
-            roles.add(Factory.getRoleService().findByName("user"));
-            newUser.setRoles(roles);
-            Factory.getUserService().createNewUser(newUser);
-            result.setView("home");
+            result.setRedirect(true);
+            addNewUser(username, password, email);
+            result.setView("login");
             result.addAttribute("message", "User has been successfully created!");
         } else {
             result.setView("signup");
@@ -50,12 +48,19 @@ public class SignUpController extends Controller {
 
     private String validate(String username, String password, String confPassword) throws SQLException {
         String result = null;
-        UserService userService = Factory.getUserService();
-        if (userService.userExists(username)) {
+        if (Factory.getUserService().userExists(username)) {
             result = "Username with such username already exists.";
         } else if (!password.equals(confPassword)) {
             result = "Password does not match the confirm password.";
         }
         return result;
+    }
+
+    private void addNewUser(String username, String password, String email) throws SQLException {
+        User newUser = new User(username, password, email);
+        List<Role> roles = new ArrayList<>();
+        roles.add(Factory.getRoleService().findByName("user"));
+        newUser.setRoles(roles);
+        Factory.getUserService().createNewUser(newUser);
     }
 }

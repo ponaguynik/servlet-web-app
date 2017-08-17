@@ -6,6 +6,7 @@ import com.ponagayba.model.Role;
 import com.ponagayba.model.User;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
@@ -27,6 +28,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAll() throws SQLException {
+        List<User> result = userDao.getAll();
+        for (User user : result) {
+            user.setRoles(roleDao.getUserRoles(user.getId()));
+        }
+        return result;
+    }
+
+    @Override
+    public void deleteUser(int id) throws SQLException {
+        roleDao.deleteUserRoles(id);
+        userDao.delete(id);
+    }
+
+    @Override
     public boolean userExists(String username) throws SQLException {
         return userDao.userExists(username);
     }
@@ -43,6 +59,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateToken(User user) throws SQLException {
         userDao.updateToken(user);
+    }
+
+    @Override
+    public User findById(int id) throws SQLException {
+        User result = userDao.findById(id);
+        if (result != null) {
+            result.setRoles(roleDao.getUserRoles(result.getId()));
+        }
+        return result;
+    }
+
+    @Override
+    public void updateUser(User user) throws SQLException {
+        userDao.update(user);
     }
 
     @Override

@@ -8,6 +8,7 @@ public class User {
     private int id;
     private String username;
     private String password;
+    private String email;
     private String token;
     private List<Role> roles;
 
@@ -21,10 +22,23 @@ public class User {
         this.password = password;
     }
 
-    public User(int id, String username, String password, String token) {
+    public User(String username, String password, String email) {
         this(username, password);
+        this.email = email;
+    }
+
+    public User(int id, String username, String password, String email, String token) {
+        this(username, password, email);
         this.id = id;
         this.token = token;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<Role> getRoles() {

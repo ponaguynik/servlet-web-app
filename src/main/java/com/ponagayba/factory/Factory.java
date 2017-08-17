@@ -1,6 +1,8 @@
 package com.ponagayba.factory;
 
 import com.ponagayba.controller.*;
+import com.ponagayba.controller.admin.DeleteUserController;
+import com.ponagayba.controller.admin.ManageUserController;
 import com.ponagayba.dao.*;
 import com.ponagayba.model.Role;
 import com.ponagayba.service.*;
@@ -9,8 +11,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Factory {
-
-    private static Role roleService;
 
     public static Controller getHomeController() {
         return new HomeController();
@@ -42,6 +42,10 @@ public class Factory {
 
     public static Controller getProfileController() {
         return new ProfileController();
+    }
+
+    public static Controller getUsersController() {
+        return new UsersController();
     }
 
     public static Connection getConnection() {
@@ -85,5 +89,13 @@ public class Factory {
 
     public static RoleService getRoleService() {
         return new RoleServiceImpl(getRoleDao());
+    }
+
+    public static Controller getDeleteUserController() {
+        return new DeleteUserController();
+    }
+
+    public static Controller getManageUserController() {
+        return new ManageUserController();
     }
 }

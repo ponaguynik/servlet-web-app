@@ -7,7 +7,7 @@ public class ModelAndView {
 
     private String view;
     private Map<String, Object> model;
-
+    private boolean redirect;
 
     public ModelAndView() {
         model = new HashMap<>();
@@ -21,6 +21,14 @@ public class ModelAndView {
     public ModelAndView addAttribute(String attributeName, Object attributeValue) {
         model.put(attributeName, attributeValue);
         return this;
+    }
+
+    public boolean isRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(boolean redirect) {
+        this.redirect = redirect;
     }
 
     public String getView() {

@@ -6,6 +6,10 @@
 </jsp:include>
 <div id="login-form">
     <h2>Sign Up</h2>
+    <c:if test="${requestScope.message != null}">
+        <br>
+        <p style="color: green;"><c:out value="${requestScope.message}" /></p>
+    </c:if>
     <c:if test="${requestScope.error != null}">
         <br>
         <p style="color: red;"><c:out value="${requestScope.error}" /></p>
@@ -14,6 +18,9 @@
         <div id="form-container" class="flex-container">
             <label for="username-input">Username:</label>
             <input id="username-input" type="text" name="username" maxlength="15" required>
+            <br>
+            <label for="email-input">Email:</label>
+            <input id="email-input" type="email" name="email" maxlength="30" required>
             <br>
             <label for="password-input">Password:</label>
             <input id="password-input" type="password" name="password" maxlength="15" required>

@@ -31,6 +31,9 @@ public class DispatcherServlet extends HttpServlet {
         controllerMap.put("GET/pages/signup", Factory.getSignUpController());
         controllerMap.put("POST/pages/signup", Factory.getSignUpController());
         controllerMap.put("GET/pages/profile", Factory.getProfileController());
+        controllerMap.put("GET/pages/admin/users", Factory.getUsersController());
+        controllerMap.put("POST/pages/admin/users/deleteUser", Factory.getDeleteUserController());
+        controllerMap.put("GET/pages/admin/users/manageUser", Factory.getManageUserController());
     }
 
     private Controller getController(HttpServletRequest request) throws PageNotFoundException {
@@ -70,13 +73,13 @@ public class DispatcherServlet extends HttpServlet {
 
     private void render(ModelAndView modelAndView, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        for (Map.Entry<String, Object> entry : modelAndView.getModel().entrySet()) {
-            request.setAttribute(entry.getKey(), entry.getValue());
-        }
-        if (modelAndView.getView().equals(request.getPathInfo().substring(1))) {
-            request.getRequestDispatcher(String.format(JSP_LOCATION, modelAndView.getView())).forward(request, response);
-        } else {
+        if (modelAndView.isRedirect()) {
             response.sendRedirect(modelAndView.getView());
+        } else {
+            for (Map.Entry<String, Object> entry : modelAndView.getModel().entrySet()) {
+                request.setAttribute(entry.getKey(), entry.getValue());
+            }
+            request.getRequestDispatcher(String.format(JSP_LOCATION, modelAndView.getView())).forward(request, response);
         }
     }
 }

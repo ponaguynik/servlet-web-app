@@ -22,6 +22,7 @@ public class LogoutController extends Controller {
     protected ModelAndView processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         ModelAndView result = new ModelAndView("home");
+        result.setRedirect(true);
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("TOKEN")) {

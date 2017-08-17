@@ -3,10 +3,9 @@ package com.ponagayba.dao;
 import com.ponagayba.model.Role;
 import com.ponagayba.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDaoImpl extends AbstractDao implements UserDao {
 
@@ -17,7 +16,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     @Override
     public User getUser(User user) throws SQLException {
        String query =
-               "SELECT id, token " +
+               "SELECT id, email, token " +
                "FROM users " +
                "WHERE username=? AND password=?";
        PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -28,6 +27,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
        if (resultSet.next()) {
            result = new User();
            result.setId(resultSet.getInt("id"));
+           result.setEmail(resultSet.getString("email"));
            result.setToken(resultSet.getString("token"));
            result.setUsername(user.getUsername());
            result.setPassword(user.getPassword());
@@ -36,9 +36,30 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     }
 
     @Override
+    public List<User> getAll() throws SQLException {
+        String query =
+                "SELECT id, username, password, email, token " +
+                "FROM users";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        List<User> result = new ArrayList<>();
+        while (resultSet.next()) {
+            User user = new User(
+                    resultSet.getInt("id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("password"),
+                    resultSet.getString("email"),
+                    resultSet.getString("token")
+            );
+            result.add(user);
+        }
+        return result;
+    }
+
+    @Override
     public boolean userExists(String username) throws SQLException {
         String query =
-                "SELECT * FROM users " +
+                "SELECT id FROM users " +
                 "WHERE username=?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, username);
@@ -49,11 +70,12 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     @Override
     public void create(User user) throws SQLException {
         String query =
-                "INSERT INTO users(username, password) " +
-                "VALUES(?, ?)";
+                "INSERT INTO users(username, password, email) " +
+                "VALUES(?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, user.getUsername());
         preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setString(3, user.getEmail());
         preparedStatement.execute();
     }
 
@@ -72,7 +94,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     @Override
     public User findByToken(String token) throws SQLException {
         String query =
-                "SELECT id, username, password " +
+                "SELECT id, username, password, email " +
                 "FROM users " +
                 "WHERE token=?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -84,6 +106,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
                     resultSet.getInt("id"),
                     resultSet.getString("username"),
                     resultSet.getString("password"),
+                    resultSet.getString("email"),
                     token
             );
         }
@@ -113,15 +136,48 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     }
 
     @Override
-    public void update(User user) {
+    public void update(User user) throws SQLException {
+        String query =
+                "UPDATE users " +
+                "SET username=?, password=?, email=?, token=? " +
+                "WHERE id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, user.getUsername());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setString(3, user.getEmail());
+        preparedStatement.setString(4, user.getToken());
+        preparedStatement.setInt(5, user.getId());
+        preparedStatement.executeUpdate();
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
+        String query =
+                "DELETE FROM users " +
+                "WHERE id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        preparedStatement.execute();
     }
 
     @Override
-    public User findById(int id) {
+    public User findById(int id) throws SQLException {
+        String query =
+                "SELECT username, password, email, token " +
+                "FROM users " +
+                "WHERE id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return new User(
+                    id,
+                    resultSet.getString("username"),
+                    resultSet.getString("password"),
+                    resultSet.getString("email"),
+                    resultSet.getString("token")
+            );
+        }
         return null;
     }
 }
